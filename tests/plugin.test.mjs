@@ -9,7 +9,7 @@ const plugin = join(root, 'plugins', 'stronux');
 const skillsDir = join(plugin, 'skills');
 const skills = readdirSync(skillsDir);
 
-// The 29 tools of the Stronux MCP (tools/list). Update by hand when the MCP changes:
+// The 31 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
 // that is the signal to review the skills.
 const TOOLS = new Set([
   'whoami', 'list_offers', 'get_course_structure',
@@ -20,11 +20,10 @@ const TOOLS = new Set([
   'create_guide', 'prepare_guide_upload', 'create_service', 'set_service_booking',
   'create_bundle', 'update_bundle_courses', 'update_offer', 'set_offer_cover',
   'publish_offer', 'show_lessons', 'create_space_link',
+  'prepare_image_upload', 'set_section_cover',
 ]);
-// Planned by the image-upload fix (signed URLs); not in tools/list yet.
-const PLANNED = new Set(['prepare_image_upload', 'set_section_cover']);
 
-test('29 known tools', () => assert.equal(TOOLS.size, 29));
+test('31 known tools', () => assert.equal(TOOLS.size, 31));
 
 test('the six skills exist', () => {
   assert.deepEqual([...skills].sort(), ['bundle', 'course', 'guide', 'service', 'setup-offers', 'space-link']);
@@ -47,7 +46,7 @@ test('tool names in backticks exist', () => {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
     for (const [, name] of text.matchAll(/`([a-z_]+)`/g)) {
       if (!toolLike.test(name) || name === 'publish_enabled') continue; // publish_enabled is a whoami field
-      assert.ok(TOOLS.has(name) || PLANNED.has(name), `${s}: unknown tool ${name}`);
+      assert.ok(TOOLS.has(name), `${s}: unknown tool ${name}`);
     }
   }
 });
@@ -55,7 +54,7 @@ test('tool names in backticks exist', () => {
 test('forbidden words', () => {
   for (const s of skills) {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
-    for (const w of ['delete_', 'remove_', 'unpublish', 'acceptOverage', 'isPublished']) {
+    for (const w of ['delete_', 'remove_', 'unpublish', 'acceptOverage', 'isPublished', 'image_base64', 'base64']) {
       assert.ok(!text.includes(w), `${s}: contains ${w}`);
     }
   }

@@ -49,7 +49,13 @@ Show a short plan (offer, sections, lessons, what gets uploaded, price). Ask eve
 
 ## 5. Images
 
-Today covers go as `image_base64` (JPEG, PNG or WebP, up to 1.5 MB; resize first if larger) in `set_course_cover` and `set_offer_cover`. Stronux is moving image uploads to signed URLs (`prepare_image_upload`, then `curl -X PUT`, then pass the returned `upload_id`). If the tool list shows `prepare_image_upload`, use that flow for every image and never base64.
+Every image (covers, link cards) goes by signed URL, never as text inside a tool argument:
+
+1. `prepare_image_upload` with `content_type` (image/jpeg, image/png or image/webp) and `byte_size` (up to 1.5 MB; resize first if larger). It returns `upload_id`, `upload_url` (valid 15 minutes) and `content_type`.
+2. `curl -X PUT -H "Content-Type: <content_type>" --upload-file "<file>" "<upload_url>"`. One image at a time.
+3. Call the tool that sets the image (`set_course_cover`, `set_section_cover`, `set_offer_cover` or `create_space_link`) with the `upload_id`.
+
+If the `upload_id` is unknown or expired (`upload_not_found`), prepare a new upload. If the person has no image you may make a simple one with code (for example a PNG with the title); never generate images with AI.
 
 ## 6. While working and at the end
 

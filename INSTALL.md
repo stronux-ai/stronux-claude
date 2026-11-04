@@ -46,7 +46,7 @@ Availability of custom connectors depends on your Claude plan (the Free plan all
 ## Notes
 
 - The client ID is public (a PKCE client with no secret). No secret is stored in this repository.
-- Files are uploaded with `curl` to a signed URL that Stronux gives Claude, so Claude needs permission to run `curl` in your folder.
+- Files and images are uploaded with `curl` to a signed URL that Stronux gives Claude, so Claude needs permission to run `curl` in your folder.
 
 ## Legal
 
