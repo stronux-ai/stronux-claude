@@ -1,0 +1,12 @@
+{
+  "name": "stronux",
+  "owner": { "name": "Stronux" },
+  "metadata": { "description": "Stronux plugins for Claude: set up your academy offers from your own files." },
+  "plugins": [
+    {
+      "name": "stronux",
+      "source": "./plugins/stronux",
+      "description": "Set up courses, guides, services and bundles in your Stronux academy from your own files."
+    }
+  ]
+}

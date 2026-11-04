@@ -1,0 +1,11 @@
+{
+  "name": "stronux",
+  "version": "1.1.0",
+  "description": "Turn the files you already have into Stronux offers: courses, guides, services, bundles and space links. Claude never deletes and only publishes when you say yes.",
+  "author": { "name": "Stronux", "url": "https://stronux.com" },
+  "homepage": "https://github.com/stronux-ai/stronux-claude",
+  "repository": "https://github.com/stronux-ai/stronux-claude",
+  "license": "MIT",
+  "privacyPolicyUrl": "https://stronux.com/privacy-policy",
+  "keywords": ["stronux", "courses", "academy"]
+}
