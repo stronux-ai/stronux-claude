@@ -13,6 +13,13 @@ A plugin for Claude Code and Claude Desktop that turns the files you already hav
 /plugin install stronux@stronux
 ```
 
+Or from a terminal, which installs directly:
+
+```
+claude plugin marketplace add stronux-ai/stronux-claude
+claude plugin install stronux@stronux
+```
+
 Full steps for Claude Code and Claude Desktop: [INSTALL.md](INSTALL.md).
 
 The plugin currently points to Stronux staging for testing.

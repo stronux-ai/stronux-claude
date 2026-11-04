@@ -14,10 +14,12 @@ The plugin has two parts: the **connection** to Stronux and the **skills** that 
 
    (or `claude plugin marketplace add stronux-ai/stronux-claude` in a terminal)
 
+   Two ways, same result. **In a terminal** (installs directly): `claude plugin marketplace add ...` and `claude plugin install stronux@stronux`. **Inside a Claude Code session**: `/plugin marketplace add ...` and `/plugin install stronux@stronux` open a panel where you confirm the install.
+
 2. Install the plugin:
 
    ```
-   /plugin install stronux@stronux
+   claude plugin install stronux@stronux
    ```
 
 3. Run `/mcp`, choose `stronux` and **Authenticate**. The Stronux login opens in your browser; when you come back it says connected.
