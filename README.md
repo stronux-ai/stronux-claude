@@ -30,7 +30,7 @@ The plugin currently points to Stronux staging for testing.
 |---|---|
 | `.claude-plugin/marketplace.json` | The `stronux` marketplace |
 | `plugins/stronux/.mcp.json` | Connection to the Stronux MCP server |
-| `plugins/stronux/skills/` | `setup-offers`, `course`, `guide`, `service`, `bundle`, `space-link` |
+| `plugins/stronux/skills/` | `setup-offers`, `course`, `guide`, `service`, `bundle`, `space-link`, `stats` |
 | `tests/` | Checks run in CI with `claude plugin validate --strict` |
 
 ## Legal
