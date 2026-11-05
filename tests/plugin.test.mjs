@@ -9,7 +9,7 @@ const plugin = join(root, 'plugins', 'stronux');
 const skillsDir = join(plugin, 'skills');
 const skills = readdirSync(skillsDir);
 
-// The 33 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
+// The 36 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
 // that is the signal to review the skills.
 const TOOLS = new Set([
   'whoami', 'list_offers', 'get_course_structure',
@@ -21,13 +21,14 @@ const TOOLS = new Set([
   'create_bundle', 'update_bundle_courses', 'update_offer', 'set_offer_cover',
   'publish_offer', 'show_lessons', 'create_space_link',
   'prepare_image_upload', 'set_section_cover',
+  'get_academy_stats', 'list_member_changes', 'list_member_joins',
   'get_cover', 'set_cover_framing',
 ]);
 
-test('33 known tools', () => assert.equal(TOOLS.size, 33));
+test('36 known tools', () => assert.equal(TOOLS.size, 36));
 
-test('the six skills exist', () => {
-  assert.deepEqual([...skills].sort(), ['bundle', 'course', 'guide', 'service', 'setup-offers', 'space-link']);
+test('the seven skills exist', () => {
+  assert.deepEqual([...skills].sort(), ['bundle', 'course', 'guide', 'service', 'setup-offers', 'space-link', 'stats']);
 });
 
 test('frontmatter has only name and description', () => {
