@@ -57,6 +57,21 @@ Every image (covers, link cards) goes by signed URL, never as text inside a tool
 
 If the `upload_id` is unknown or expired (`upload_not_found`), prepare a new upload. If the person has no image you may make a simple one with code (for example a PNG with the title); never generate images with AI.
 
+### Cover framing
+
+A cover is cropped differently on each screen, so after every `set_course_cover`, `set_section_cover` or `set_offer_cover` you set its focal point:
+
+1. Look at the image (the file you uploaded, or the one you download with `curl -o` to a temporary folder when you use `get_cover`). Do not show its URL in the chat.
+2. Pick the focal point yourself, on the important part: the centre of the text, or of the subject (a face, the main object). The two numbers go from 0 to 100; 0,0 is the top-left corner and 50,50 the centre. Do not ask first.
+3. Call `set_cover_framing` with `target` (course, section or offer), the ids that go with it, `focal_x` and `focal_y`. A course cover is always target course, never offer. If it answers `cover_not_found`, the cover has no image yet: upload it first.
+4. In the final summary say what you chose and how to change it: "I framed the cover at X/Y; you can move it with Frame cover in Stronux."
+
+You may also reframe a cover that already exists, even one you did not upload: read it with `get_cover`, look at it and call `set_cover_framing`. This only changes the framing; it never replaces or removes the image.
+
+Frames by screen, so you know what gets cropped: the module card is 16:10; the course cover is 16:7 on desktop and 4:3 on mobile; Explore and the public home are 16:9; My spaces is 4:3.
+
+**Safe zone when you make an image with code:** make it 1200x675 and keep everything that matters (text, icon) inside the central rectangle of 900x525. The edges may hold only background, because the narrowest frames crop them. Then set the focal point at the centre of the text.
+
 ## 6. While working and at the end
 
 Report progress ("uploading 3 videos, 1 ready"). At the end summarise what is in Stronux (offer, sections, lessons, files, price, draft state) and what could not be done and why. To publish, ask for the yes naming the offer.
