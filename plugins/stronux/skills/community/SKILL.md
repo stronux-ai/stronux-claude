@@ -5,7 +5,11 @@ description: Use when the person asks what is new in the community of their acad
 
 # Community: what is new, post and reply
 
-Reading (`list_community_activity`, `get_community_post`) never asks for the yes and changes nothing. Writing (`create_community_post`, `reply_in_community`) publishes in the name of the owner and always asks for the yes: see "Posting and replying" at the end. Answer in the language the person writes in. This skill never edits, hides, pins, closes or deletes anything.
+Reading (`list_community_activity`, `get_community_post`) never asks for the yes and changes nothing, not even the "last time" mark. Three tools write and make the app ask the person for permission before they run (say it once): `mark_community_seen` (see "What is new"), and `create_community_post` and `reply_in_community`, which publish in the name of the owner and also need the person's yes in the chat: see "Posting and replying" at the end. Answer in the language the person writes in.
+
+**Academy:** call `whoami` first and pass `space_id` in every other tool. With more than one academy ask which one (by name or handle, never the id); the community, the mark and the drafts belong to that academy. If a tool answers `space_choice_required`, `space_not_connected` or `space_mismatch`, explain what happened and call `whoami` again. The rules are in `setup-offers` section 1.
+
+This skill never edits, hides, pins, closes or deletes anything.
 
 ## Tools
 
@@ -13,13 +17,17 @@ Reading (`list_community_activity`, `get_community_post`) never asks for the yes
 - `create_community_post`: a post or a question in the community of one course (needs the yes and Publish on).
 - `reply_in_community`: a comment on a post or a reply to a comment (needs the yes and Publish on).
 - `get_community_post`: one post with its whole thread, to understand the context.
+- `mark_community_seen`: saves that you showed everything new, so the next read starts after it (the app asks for permission).
 
 ## What is new
 
-By default the list starts at **the last time** Claude read the community (the first time, 7 days back). That mark is Claude's own: opening the community in the Stronux app does not move it, and it only moves when you brought the whole academy to the end. So:
+By default the list starts at **the last time** Claude marked the community as seen (the first time, 7 days back). That mark is Claude's own: opening the community in the Stronux app does not move it, and **reading never moves it**. It only moves when you call `mark_community_seen`:
 
-- The person can ask "since last Monday": pass the date in `since` (not older than 90 days). A date or a single course (`course_id`, from `list_offers`) never moves the mark.
-- If the answer says `marked_read: false` after the last page, do not promise that the next time will start from here; just say what you showed.
+- Read with the default (`last_time`) and for the whole academy (no `course_id`), page by page as the person agrees (see "More than 20"). Show everything new.
+- On the last page (`next_cursor` is null) the answer brings a `mark_token`. When you have **finished reviewing everything new**, call `mark_community_seen` with that `mark_token`. It is a write, so the app asks the person for permission: tell them ("I will mark this as seen so next time starts here; the app will ask you to allow it"). If they say no, do not insist; the same things will come up next time.
+- There is no `mark_token` when the person asked for a date (`since`), for a single course (`course_id`), or when you stopped before the last page. Then mark nothing and do not promise that the next time starts from here; just say what you showed. Never invent or reuse a `mark_token`: it is only good for the academy and the read that gave it.
+- If `mark_community_seen` answers `invalid_mark_token`, `mark_token_other_academy` or `mark_token_too_old`, say it was not saved and offer to read again with the default.
+- The person can ask "since last Monday": pass the date in `since` (not older than 90 days).
 - Things the person wrote themselves do not come in the list.
 
 ## How to show it
@@ -36,7 +44,7 @@ Group what you got **by course, then by post**, and say who wrote what and when,
 
 ## More than 20
 
-`total` says how many there are. When `next_cursor` is not null, show the 20 you have and say it plainly: "I am showing the first 20 of 34. Shall I continue with the rest?". Call again with `next_cursor` only if the person says yes (the date and the course travel inside it). When the person asked for one thing in particular (the questions without an answer, for example), you can read the pages yourself and keep only that, but say how many you read.
+`total` says how many there are. When `next_cursor` is not null, show the 20 you have and say it plainly: "I am showing the first 20 of 34. Shall I continue with the rest?". Call again with `next_cursor` only if the person says yes (the date and the course travel inside it). When the person asked for one thing in particular (the questions without an answer, for example), you can read the pages yourself and keep only that, but say how many you read. The mark comes only after the last page.
 
 ## Nothing new
 
@@ -52,7 +60,7 @@ You only see what the members can see in the community. Do not say, guess or hin
 
 ## One thread
 
-Use `get_community_post` with the `post_id` of an item to read the whole thread before talking about it: the post and its comments in order, up to 200 (`comments_truncated: true` says there are more). `is_answer: true` is a comment the team marked as the answer. `locked: true` means the members cannot reply anymore; the owner still can. Reading a thread does not mark anything as read.
+Use `get_community_post` with the `post_id` of an item to read the whole thread before talking about it: the post and its comments in order, up to 200 (`comments_truncated: true` says there are more). `is_answer: true` is a comment the team marked as the answer. `locked: true` means the members cannot reply anymore; the owner still can. Reading a thread does not mark anything as seen.
 
 ## Posting and replying
 

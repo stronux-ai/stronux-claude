@@ -24,7 +24,14 @@ Full steps for Claude Code and Claude Desktop: [INSTALL.md](INSTALL.md).
 
 The plugin currently points to Stronux staging for testing.
 
-## New in 1.3.0
+## New in 1.4.0
+
+- **Several academies on one connection.** Claude starts with `whoami`, which lists your academies. If you have more than one, it asks in which to work (by name, never by id) and sends `space_id` in every call. If a call answers `space_choice_required`, `space_not_connected` or `space_mismatch`, Claude explains it and checks `whoami` again.
+- **The community "seen" mark is its own step.** Reading never moves it. When Claude finishes reviewing everything new it calls `mark_community_seen` with the `mark_token` the read gave, and the app asks your permission.
+- **Permission prompts.** Every tool that changes something now asks your permission in the app before it runs; the skills tell you once.
+- The MCP now has 45 tools.
+
+## Before, in 1.3.0
 
 - `members` skill: invite people to your courses and to the team. Tools: `preview_member_invites`, `invite_members`, `describe_staff_roles`, `invite_staff`. Invitations send real emails, so Claude shows the list and asks for the yes first.
 - `community` skill: see what is new in your communities, read a thread, and post or reply in the name of the owner. Tools: `list_community_activity`, `get_community_post`, `create_community_post`, `reply_in_community`. Posting and replying need your yes on the exact text.

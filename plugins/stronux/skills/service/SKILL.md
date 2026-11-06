@@ -5,7 +5,7 @@ description: Use when the person asks to set up a service in Stronux, such as 1:
 
 # Service
 
-Follow the `setup-offers` skill first (folder reading, plan, rules). Then:
+Follow the `setup-offers` skill first (folder reading, plan, rules, including `whoami` and `space_id` on every call). Then:
 
 1. Ask the kind, `one_on_one` or `group`, if the `.md` does not say. It cannot be changed later.
 2. `create_service` with name, description and kind.

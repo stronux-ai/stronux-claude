@@ -7,6 +7,10 @@ description: Use when the person asks to invite or enroll people in a course ("e
 
 This sends real emails and uses plan seats, so it only happens after the person says yes to the exact list. Answer in the language the person writes in.
 
+**Academy:** call `whoami` first and pass `space_id` in every other tool. With more than one academy ask which one (by name or handle, never the id); the preview, the list and the yes belong to that academy. If a tool answers `space_choice_required`, `space_not_connected` or `space_mismatch`, explain what happened and call `whoami` again. The rules are in `setup-offers` section 1.
+
+`invite_members` and `invite_staff` make the app ask the person for permission before they run: say it once. That prompt does not replace the yes to the list.
+
 ## Tools
 
 - `preview_member_invites`: shows what would happen for each person. Writes nothing and sends nothing.

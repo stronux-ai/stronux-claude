@@ -5,7 +5,7 @@ description: Use when the person asks to set up, build or edit a course in Stron
 
 # Course
 
-Follow the `setup-offers` skill first (folder reading, plan, rules). Then:
+Follow the `setup-offers` skill first (folder reading, plan, rules, including `whoami` and `space_id` on every call). Then:
 
 1. `create_course` with the name and description, or `update_course` if `list_offers` shows it exists. If the name is taken (`slug_taken`) ask for another.
 2. `add_section` for each subfolder, in order (`reorder_sections` with every section id if the order is wrong).

@@ -7,6 +7,8 @@ description: Use when the person asks how their academy is doing, who joined, wh
 
 Read only: nothing here asks for the yes, and nothing changes in Stronux. Stronux calculates every number; never add up, average or estimate them yourself. Answer in the language the person writes in.
 
+**Academy:** call `whoami` first and pass `space_id` in every other tool. With more than one academy ask which one (by name or handle, never the id); the numbers of one academy are never mixed with another's. If a tool answers `space_choice_required`, `space_not_connected` or `space_mismatch`, explain what happened and call `whoami` again. The rules are in `setup-offers` section 1.
+
 ## Tools
 
 - `get_academy_stats`: the numbers for the academy and for each course.
