@@ -1,11 +1,23 @@
 {
   "name": "stronux",
-  "version": "1.4.0",
+  "displayName": "Stronux",
+  "version": "1.5.0",
   "description": "Turn the files you already have into Stronux offers: courses, guides, services, bundles and space links. Claude never deletes and only publishes when you say yes.",
-  "author": { "name": "Stronux", "url": "https://stronux.com" },
-  "homepage": "https://github.com/stronux-ai/stronux-claude",
+  "author": {
+    "name": "Stronux",
+    "url": "https://stronux.com"
+  },
+  "homepage": "https://stronux.com/claude",
   "repository": "https://github.com/stronux-ai/stronux-claude",
   "license": "MIT",
+  "icon": "./icon.png",
+  "documentationUrl": "https://stronux.com/claude",
+  "supportUrl": "https://stronux.com/contact",
   "privacyPolicyUrl": "https://stronux.com/privacy-policy",
-  "keywords": ["stronux", "courses", "academy"]
+  "termsOfServiceUrl": "https://stronux.com/terms-of-service",
+  "keywords": [
+    "stronux",
+    "courses",
+    "academy"
+  ]
 }
