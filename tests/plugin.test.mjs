@@ -48,7 +48,7 @@ test('tool names in backticks exist', () => {
   for (const s of skills) {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
     for (const [, name] of text.matchAll(/`([a-z_]+)`/g)) {
-      if (!toolLike.test(name) || name === 'publish_enabled') continue; // publish_enabled is a whoami field
+      if (!toolLike.test(name) || name === 'publish_enabled' || name === 'set_password') continue; // publish_enabled is a whoami field; set_password is an email_sent value
       assert.ok(TOOLS.has(name), `${s}: unknown tool ${name}`);
     }
   }
