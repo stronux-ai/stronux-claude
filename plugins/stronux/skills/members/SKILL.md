@@ -17,14 +17,15 @@ This sends real emails and uses plan seats, so it only happens after the person 
 1. **Get the list.** Emails (and names if they have them) and the courses. Take the course ids from `list_offers`; if a course name is ambiguous, ask which one. Never guess an email or a course.
 2. **Preview first.** Call `preview_member_invites` with the people and `course_ids`. Never call `invite_members` without a preview of that same list.
 3. **Show the whole table**, one row per person: email, course, what happens and which email they get.
-   - `will_get_access` + "set_password": new person, gets an email to create their password.
+   - `will_get_access` + `set_password`: new person, gets an email to create their password.
    - `will_get_access` + `access_added`: already has an account, gets an email saying they have access to a new course.
    - `will_get_access` + `unknown`: Stronux could not tell which email; they can still be invited.
    - `already_has_access`: they already have it. Nothing happens and they get no email.
    - `cannot_invite` with a `reason`: `invalid_email` (ask for the right one), `staff_user` (they already work in this academy as staff: they are not invited as a member; to invite someone to the team use `invite_staff`, see the Staff section), `duplicate` (the same email twice).
    - `missing_course_ids`: they have some of the courses; only the missing ones are added.
-   - `plan`: if there is a limit, say it ("500 seats, 132 used, 134 after this").
-4. **Ask for the yes** to that list. Only after they say yes to it, call `invite_members` with the same people and courses and `person_confirmed: true`. If the list changes in any way, preview again and ask again.
+   - `plan`: if there is a limit, say it ("500 seats, 132 used, 134 after this"). If `after` is above `limit`, the list does not fit: say so ("your plan allows 500 and this would make 503") and offer "I can invite the first N" (N = the seats left, counting only people who would get access, in the order of the list) or to upgrade the plan in Stronux. Never accept an overage with a cost; if they pick the first N, preview that shorter list and ask for the yes again.
+   - Always say: "Access is free and does not expire." and "Emails cannot be taken back once they are sent."
+4. **Ask for the yes** to that list ("Should I invite the N people?"). Only after they say yes to it, call `invite_members` with the same people and courses and `person_confirmed: true`. If the list changes in any way, preview again and ask again.
 5. **Report what happened**, from the answer and not from the preview: `invited`, `already_has_access`, `failed` (with `error`) and `not_attempted`.
 
 ## Rules
