@@ -1,9 +1,9 @@
 ---
 name: members
-description: Use when the person asks to invite or enroll people in a course ("enroll these 3 people in Portrait", "invita a estas personas a mi curso", "dale acceso a ana@example.com", "add these members to Photography Basics").
+description: Use when the person asks to invite or enroll people in a course ("enroll these 3 people in Portrait", "invita a estas personas a mi curso", "dale acceso a ana@example.com", "add these members to Photography Basics"), or to invite someone to the team as an instructor or admin ("invita a Ana como instructora", "add Luis as an admin", "what can an instructor do").
 ---
 
-# Invite members
+# Invite members and staff
 
 This sends real emails and uses plan seats, so it only happens after the person says yes to the exact list. Answer in the language the person writes in.
 
@@ -35,3 +35,26 @@ This sends real emails and uses plan seats, so it only happens after the person 
 - **A full plan** (`plan_limit_reached`, with `limit` and `upgrade_url`) stops the list there. The next people come back as `not_attempted`: say who was not invited and that the plan needs an upgrade in Stronux.
 - **Never remove access, set an end date, import a file or resend an invitation.** Those are done in Stronux, Members. If the person asks, say so.
 - **Only emails the person gave you.** Never add a name, an id or anything else about a person that you were not given.
+
+## Staff: invite someone to the team
+
+Members are learners. Staff work in the academy as **Instructor** or **Admin**. This also sends a real email and uses a seat of the plan, so it also needs a yes.
+
+- `describe_staff_roles`: what each role can and cannot do. Writes nothing. Use it whenever the person asks what a role is, and always before the yes.
+- `invite_staff`: invites one person to the team with `email`, `role` (`instructor` or `admin`), optional `course_ids` (from `list_offers`) and `person_confirmed`. Needs Publish on, like `invite_members`.
+
+### The flow, always in this order
+
+1. **Get the person and the role.** Email, and instructor or admin. If the person says "so she can edit courses", that is **Admin**, not Instructor: say so. Never guess an email or a role.
+2. **Call `describe_staff_roles` and show it.** Before asking for the yes, show the email, the role, the courses (or "all courses" if none were given) and, in plain words, what that role can and cannot do.
+3. **Ask for the yes** to that person and that role. Only then call `invite_staff` with `person_confirmed: true`. One person per yes: for a second person, show and ask again.
+4. **Report from the answer.** `invited: true` means a new person got the team email; `invited: false` means they already had an account and now have the role. Tell them they will appear in Members, Team.
+
+### Rules
+
+- **Never the owner.** If the person asks for it ("make her the owner"), do not call anything: ownership is transferred from Stronux and asks for the security code. The tool answers `role_not_allowed` if it is tried.
+- **Never remove or change a role.** There is no tool to take someone off the team, change their role, take courses away or transfer the ownership: those are done in Stronux, Members, Team. If the answer is `already_on_team`, say which role they have today and that changing it is done from Stronux.
+- **A full plan** (`plan_limit_reached`, with `limit` and `upgrade_url`): say that the plan has no more seats for that role and that it needs an upgrade in Stronux.
+- **No permission** (`forbidden`): only people who manage the team can invite staff; the person can ask an owner or do it from Stronux.
+- **Publish off** (the answer says Publish is turned off): tell the person to invite from Stronux, Members, Team, or to turn Publish on; do not try again.
+- **Only what the person gave you.** Never invent an email, a role or a course.
