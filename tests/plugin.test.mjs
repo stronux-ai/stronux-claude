@@ -9,7 +9,7 @@ const plugin = join(root, 'plugins', 'stronux');
 const skillsDir = join(plugin, 'skills');
 const skills = readdirSync(skillsDir);
 
-// The 44 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
+// The 45 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
 // that is the signal to review the skills.
 const TOOLS = new Set([
   'whoami', 'list_offers', 'get_course_structure',
@@ -25,10 +25,10 @@ const TOOLS = new Set([
   'get_cover', 'set_cover_framing',
   'preview_member_invites', 'invite_members',
   'describe_staff_roles', 'invite_staff',
-  'list_community_activity', 'get_community_post', 'create_community_post', 'reply_in_community',
+  'list_community_activity', 'mark_community_seen', 'get_community_post', 'create_community_post', 'reply_in_community',
 ]);
 
-test('44 known tools', () => assert.equal(TOOLS.size, 44));
+test('45 known tools', () => assert.equal(TOOLS.size, 45));
 
 test('the nine skills exist', () => {
   assert.deepEqual([...skills].sort(), ['bundle', 'community', 'course', 'guide', 'members', 'service', 'setup-offers', 'space-link', 'stats']);
@@ -46,14 +46,26 @@ test('frontmatter has only name and description', () => {
 });
 
 test('tool names in backticks exist', () => {
-  const toolLike = /^(whoami|(?:create|add|update|set|get|list|prepare|attach|publish|show|reorder)_[a-z_]+)$/;
+  const toolLike = /^(whoami|(?:create|add|update|set|get|list|prepare|attach|publish|show|reorder|preview|invite|describe)_[a-z_]+|mark_community_seen)$/;
   for (const s of skills) {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
     for (const [, name] of text.matchAll(/`([a-z_]+)`/g)) {
-      if (!toolLike.test(name) || name === 'publish_enabled' || name === 'set_password') continue; // publish_enabled is a whoami field; set_password is an email_sent value
+      if (!toolLike.test(name) || name === 'publish_enabled' || name === 'set_password' || name === 'invite_failed') continue; // publish_enabled is a whoami field; set_password is an email_sent value; invite_failed is an error code
       assert.ok(TOOLS.has(name), `${s}: unknown tool ${name}`);
     }
   }
+});
+
+test('every skill carries the whoami and space_id rule; community marks with mark_token; no marked_read', () => {
+  for (const s of skills) {
+    const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
+    assert.ok(text.includes('`whoami`') && text.includes('`space_id`'), `${s}: needs whoami and space_id`);
+    assert.ok(!text.includes('marked_read'), `${s}: marked_read is gone`);
+  }
+  const community = readFileSync(join(skillsDir, 'community', 'SKILL.md'), 'utf8');
+  assert.ok(community.includes('mark_community_seen') && community.includes('mark_token'));
+  const setup = readFileSync(join(skillsDir, 'setup-offers', 'SKILL.md'), 'utf8');
+  for (const e of ['space_choice_required', 'space_not_connected', 'space_mismatch']) assert.ok(setup.includes(e), e);
 });
 
 test('forbidden words', () => {

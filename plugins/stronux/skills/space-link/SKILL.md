@@ -5,7 +5,7 @@ description: Use when the person wants a free offer that lives on another websit
 
 # Space link
 
-Follow the `setup-offers` skill first (folder reading, plan, rules). Then:
+Follow the `setup-offers` skill first (folder reading, plan, rules, including `whoami` and `space_id` on every call). Then:
 
 - Only for a **free** offer on another website. An external link with a price does not exist in Stronux: say so and create nothing.
 - A card has a title, an https URL and an optional image. It has no description or date: tell the person those do not fit.

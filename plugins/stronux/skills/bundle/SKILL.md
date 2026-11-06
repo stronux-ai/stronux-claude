@@ -5,7 +5,7 @@ description: Use when the person asks to group two or more existing courses into
 
 # Bundle
 
-Follow the `setup-offers` skill first (folder reading, plan, rules). Then:
+Follow the `setup-offers` skill first (folder reading, plan, rules, including `whoami` and `space_id` on every call). Then:
 
 1. `list_offers` to find the courses by name. A bundle needs two or more. If one is missing, build it first with the `course` skill or ask the person.
 2. `create_bundle` with name, description and `course_ids`. If the name is used (`name_taken`) ask for another.

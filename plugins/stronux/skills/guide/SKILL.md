@@ -5,7 +5,7 @@ description: Use when the person asks to create or edit a guide (a downloadable 
 
 # Guide
 
-Follow the `setup-offers` skill first (folder reading, plan, rules). Then:
+Follow the `setup-offers` skill first (folder reading, plan, rules, including `whoami` and `space_id` on every call). Then:
 
 1. `create_guide` with the name and description (the file and price come next). Edit texts later with `update_offer`.
 2. `prepare_guide_upload` with filename, content_type (for example `application/pdf`) and byte_size (up to 50 MB), then `curl -X PUT -H "Content-Type: <content_type>" --upload-file "<file>" "<upload_url>"`. A guide that already has a file answers `guide_has_file`: never replace it, tell the person it is changed in Stronux. If the upload fails, do not retry: the guide already counts as having a file; tell the person to upload it from Stronux.

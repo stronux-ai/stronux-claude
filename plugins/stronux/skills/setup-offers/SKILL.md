@@ -9,8 +9,12 @@ Reply in the language the person writes in. This skill is shared by `course`, `g
 
 ## 1. Before anything
 
-1. Call `whoami`. If `space` is null, say why (no academy, or several: the person picks one when connecting) and stop. Keep `connection.publish_enabled`.
-2. If the Stronux tools are missing or ask for authentication, tell the person to open `/mcp` and authenticate `stronux`. Do not look for another way in.
+1. Call `whoami` first. It returns `spaces`: the academies this connection can work in, each with `id`, `handle`, `name` and `publish_enabled`. If `spaces` is empty, say Claude is not connected to any academy. Settings, Claude in Stronux does not connect anything: the person connects Stronux again from Claude (in Claude Code, `/mcp`) and ticks the academy. Stop.
+2. **Which academy.** If there is one, say its name and use it. If there is more than one and the person did not say which, ask in which academy to work, naming them by `name` or `handle` (never show the id), and wait. Never guess. If the person later talks about another academy, switch and tell them.
+3. **Pass `space_id` (the `id` of that academy) in every tool call except `whoami`**, including reads like `list_offers`. Keep the `publish_enabled` of that academy; it can differ between academies.
+4. If a tool answers `space_choice_required` (no `space_id`) or `invalid_space_id` (not an id from `whoami`), or `space_mismatch` (the academy does not match the address Claude is connected to), tell the person in plain words what happened, call `whoami` again and continue with an academy it lists. Do not retry with an id you made up. If it answers `space_not_connected`, **do not move to another academy on your own**: say which academy (by name) is not connected and how to add it (point 1: connect Stronux again from Claude and tick it), and continue with another academy only if the person asks.
+5. If the Stronux tools are missing or ask for authentication, tell the person to open `/mcp` and authenticate `stronux`. Do not look for another way in.
+6. **Permission prompts.** Every tool that writes (create, update, upload, publish, invite, post) may make the app ask the person to allow it before it runs. Say this once, near the start ("the app may ask you to allow each change"), so it does not surprise them. That prompt is not the yes of the plan or of publishing: those still come from the person in the chat.
 
 ## 2. Read the folder without creating anything
 
@@ -39,7 +43,7 @@ Show a short plan (offer, sections, lessons, what gets uploaded, price). Ask eve
 ## 4. Rules (they repeat what the server enforces)
 
 - Never delete, hide, take offline or remove anything. If asked, say Stronux does not let Claude delete and the person can do it in Stronux. Do not look for a workaround.
-- Everything is created as a draft. Publish only after the person says yes **in this conversation** to that offer by name, and only if `publish_enabled` is true; send `person_confirmed: true` only then. Changing the price of a published offer counts as publishing. If Publish is off, say it is turned on in Settings → Claude or the offer is published from Stronux.
+- Everything is created as a draft. Publish only after the person says yes **in this conversation** to that offer by name, and only if `publish_enabled` is true for that academy; send `person_confirmed: true` only then. Changing the price of a published offer counts as publishing. If Publish is off, say it is turned on in Settings → Claude or the offer is published from Stronux.
 - Put a video only in lessons that have none; add a guide file only to a guide that has none. If the tool says it already has one, tell the person it is changed in Stronux.
 - Upload files with `curl -X PUT` to the `upload_url` the tool returns, one at a time. Never paste file bytes or signed URLs in the chat.
 - Never accept a paid plan limit or overage. Explain the error: it is accepted in Stronux.
