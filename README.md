@@ -26,9 +26,9 @@ The plugin currently points to Stronux staging for testing.
 
 ## New in 1.4.0
 
-- **Several academies on one connection.** Claude starts with `whoami`, which lists your academies. If you have more than one, it asks in which to work (by name, never by id) and sends `space_id` in every call. If a call answers `space_choice_required`, `space_not_connected` or `space_mismatch`, Claude explains it and checks `whoami` again.
-- **The community "seen" mark is its own step.** Reading never moves it. When Claude finishes reviewing everything new it calls `mark_community_seen` with the `mark_token` the read gave, and the app asks your permission.
-- **Permission prompts.** Every tool that changes something now asks your permission in the app before it runs; the skills tell you once.
+- **Several academies on one connection.** Claude starts by checking which academies you connected. If you have more than one, it asks in which to work (by name or handle, never by id) and does not mix them up. If one is not connected, it tells you how to add it.
+- **"What is new" in the community.** Reading never marks anything. When Claude finishes reviewing everything new it can mark it as seen, so next time starts from there; the app may ask you to allow it.
+- **Permission prompts.** When Claude changes something, the app may ask you to allow it first; the skills tell you once.
 - The MCP now has 45 tools.
 
 ## Before, in 1.3.0

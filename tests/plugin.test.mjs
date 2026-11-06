@@ -46,20 +46,20 @@ test('frontmatter has only name and description', () => {
 });
 
 test('tool names in backticks exist', () => {
-  const toolLike = /^(whoami|(?:create|add|update|set|get|list|prepare|attach|publish|show|reorder)_[a-z_]+|mark_community_seen)$/;
+  const toolLike = /^(whoami|(?:create|add|update|set|get|list|prepare|attach|publish|show|reorder|preview|invite|describe)_[a-z_]+|mark_community_seen)$/;
   for (const s of skills) {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
     for (const [, name] of text.matchAll(/`([a-z_]+)`/g)) {
-      if (!toolLike.test(name) || name === 'publish_enabled' || name === 'set_password') continue; // publish_enabled is a whoami field; set_password is an email_sent value
+      if (!toolLike.test(name) || name === 'publish_enabled' || name === 'set_password' || name === 'invite_failed') continue; // publish_enabled is a whoami field; set_password is an email_sent value; invite_failed is an error code
       assert.ok(TOOLS.has(name), `${s}: unknown tool ${name}`);
     }
   }
 });
 
-test('skills carry the space_id rule; community marks with mark_token; no marked_read', () => {
+test('every skill carries the whoami and space_id rule; community marks with mark_token; no marked_read', () => {
   for (const s of skills) {
     const text = readFileSync(join(skillsDir, s, 'SKILL.md'), 'utf8');
-    assert.ok(text.includes('space_id') || text.includes('setup-offers'), `${s}: no space_id rule`);
+    assert.ok(text.includes('`whoami`') && text.includes('`space_id`'), `${s}: needs whoami and space_id`);
     assert.ok(!text.includes('marked_read'), `${s}: marked_read is gone`);
   }
   const community = readFileSync(join(skillsDir, 'community', 'SKILL.md'), 'utf8');

@@ -5,7 +5,7 @@ description: Use when the person asks what is new in the community of their acad
 
 # Community: what is new, post and reply
 
-Reading (`list_community_activity`, `get_community_post`) never asks for the yes and changes nothing, not even the "last time" mark. Three tools write and make the app ask the person for permission before they run (say it once): `mark_community_seen` (see "What is new"), and `create_community_post` and `reply_in_community`, which publish in the name of the owner and also need the person's yes in the chat: see "Posting and replying" at the end. Answer in the language the person writes in.
+Reading (`list_community_activity`, `get_community_post`) never asks for the yes and changes nothing, not even the "last time" mark. Three tools write, and the app may ask the person to allow them before they run (say it once): `mark_community_seen` (see "What is new"), and `create_community_post` and `reply_in_community`, which publish in the name of the owner and also need the person's yes in the chat: see "Posting and replying" at the end. Answer in the language the person writes in.
 
 **Academy:** call `whoami` first and pass `space_id` in every other tool. With more than one academy ask which one (by name or handle, never the id); the community, the mark and the drafts belong to that academy. If a tool answers `space_choice_required`, `space_not_connected` or `space_mismatch`, explain what happened and call `whoami` again. The rules are in `setup-offers` section 1.
 
@@ -17,16 +17,19 @@ This skill never edits, hides, pins, closes or deletes anything.
 - `create_community_post`: a post or a question in the community of one course (needs the yes and Publish on).
 - `reply_in_community`: a comment on a post or a reply to a comment (needs the yes and Publish on).
 - `get_community_post`: one post with its whole thread, to understand the context.
-- `mark_community_seen`: saves that you showed everything new, so the next read starts after it (the app asks for permission).
+- `mark_community_seen`: saves that you showed everything new, so the next read starts after it (the app may ask for permission).
 
 ## What is new
 
 By default the list starts at **the last time** Claude marked the community as seen (the first time, 7 days back). That mark is Claude's own: opening the community in the Stronux app does not move it, and **reading never moves it**. It only moves when you call `mark_community_seen`:
 
 - Read with the default (`last_time`) and for the whole academy (no `course_id`), page by page as the person agrees (see "More than 20"). Show everything new.
-- On the last page (`next_cursor` is null) the answer brings a `mark_token`. When you have **finished reviewing everything new**, call `mark_community_seen` with that `mark_token`. It is a write, so the app asks the person for permission: tell them ("I will mark this as seen so next time starts here; the app will ask you to allow it"). If they say no, do not insist; the same things will come up next time.
+- On the last page (`next_cursor` is null) the answer brings a `mark_token`. When you have **finished reviewing everything new**, call `mark_community_seen` with that `mark_token`. It is a write, so the app may ask the person to allow it: tell them ("I will mark this as seen so next time starts here; the app may ask you to allow it"). If they say no, do not insist; the same things will come up next time.
 - There is no `mark_token` when the person asked for a date (`since`), for a single course (`course_id`), or when you stopped before the last page. Then mark nothing and do not promise that the next time starts from here; just say what you showed. Never invent or reuse a `mark_token`: it is only good for the academy and the read that gave it.
-- If `mark_community_seen` answers `invalid_mark_token`, `mark_token_other_academy` or `mark_token_too_old`, say it was not saved and offer to read again with the default.
+- If `mark_community_seen` fails, say it was not saved and nothing changed, and do not pretend it was:
+  - `scope_missing`: this connection has no permission to write. It is not the Publish setting. The person connects Stronux again from Claude (in Claude Code, `/mcp`).
+  - `mark_failed`: Stronux could not save it right now. Nothing changed; try once more later.
+  - `invalid_mark_token`, `mark_token_other_academy` or `mark_token_too_old`: offer to read again with the default and mark at the end.
 - The person can ask "since last Monday": pass the date in `since` (not older than 90 days).
 - Things the person wrote themselves do not come in the list.
 

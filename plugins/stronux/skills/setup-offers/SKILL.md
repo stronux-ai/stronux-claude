@@ -9,12 +9,12 @@ Reply in the language the person writes in. This skill is shared by `course`, `g
 
 ## 1. Before anything
 
-1. Call `whoami` first. It returns `spaces`: the academies this connection can work in, each with `id`, `handle`, `name` and `publish_enabled`. If `spaces` is empty, say Claude is not connected to any academy and the person connects one in Stronux (Settings, Claude); stop.
+1. Call `whoami` first. It returns `spaces`: the academies this connection can work in, each with `id`, `handle`, `name` and `publish_enabled`. If `spaces` is empty, say Claude is not connected to any academy. Settings, Claude in Stronux does not connect anything: the person connects Stronux again from Claude (in Claude Code, `/mcp`) and ticks the academy. Stop.
 2. **Which academy.** If there is one, say its name and use it. If there is more than one and the person did not say which, ask in which academy to work, naming them by `name` or `handle` (never show the id), and wait. Never guess. If the person later talks about another academy, switch and tell them.
 3. **Pass `space_id` (the `id` of that academy) in every tool call except `whoami`**, including reads like `list_offers`. Keep the `publish_enabled` of that academy; it can differ between academies.
-4. If a tool answers `space_choice_required` (no `space_id`), `space_not_connected` (that academy is not connected to Claude) or `space_mismatch` (the academy does not match the address Claude is connected to), tell the person in plain words what happened, call `whoami` again and continue with the academy it lists. Do not retry with an id you made up.
+4. If a tool answers `space_choice_required` (no `space_id`) or `invalid_space_id` (not an id from `whoami`), or `space_mismatch` (the academy does not match the address Claude is connected to), tell the person in plain words what happened, call `whoami` again and continue with an academy it lists. Do not retry with an id you made up. If it answers `space_not_connected`, **do not move to another academy on your own**: say which academy (by name) is not connected and how to add it (point 1: connect Stronux again from Claude and tick it), and continue with another academy only if the person asks.
 5. If the Stronux tools are missing or ask for authentication, tell the person to open `/mcp` and authenticate `stronux`. Do not look for another way in.
-6. **Permission prompts.** Every tool that writes (create, update, upload, publish, invite, post) makes the app ask the person for permission before it runs. Say this once, near the start ("the app will ask you to allow each change"), so it does not surprise them. That prompt is not the yes of the plan or of publishing: those still come from the person in the chat.
+6. **Permission prompts.** Every tool that writes (create, update, upload, publish, invite, post) may make the app ask the person to allow it before it runs. Say this once, near the start ("the app may ask you to allow each change"), so it does not surprise them. That prompt is not the yes of the plan or of publishing: those still come from the person in the chat.
 
 ## 2. Read the folder without creating anything
 
