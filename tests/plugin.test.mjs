@@ -9,7 +9,7 @@ const plugin = join(root, 'plugins', 'stronux');
 const skillsDir = join(plugin, 'skills');
 const skills = readdirSync(skillsDir);
 
-// The 40 tools of the Stronux MCP in stronux_repo main (apps/academy/src/backend/claude-connection/mcp-*.js). Update by hand when the MCP changes:
+// The 40 tools this branch knows. The MCP in stronux_repo (apps/academy/src/backend/claude-connection/mcp-*.js) has 44 once the members skill (#4: preview_member_invites, invite_members) and the staff skill (#6: describe_staff_roles, invite_staff) are merged. Update by hand when the MCP changes:
 // that is the signal to review the skills.
 const TOOLS = new Set([
   'whoami', 'list_offers', 'get_course_structure',
