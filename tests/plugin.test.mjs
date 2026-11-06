@@ -106,7 +106,7 @@ test('nothing from a test environment ships in the repo', () => {
 });
 
 test('plugin contains only plugin.json, .mcp.json and skills (D1)', () => {
-  assert.deepEqual(readdirSync(plugin).sort(), ['.claude-plugin', '.mcp.json', 'skills']);
+  assert.deepEqual(readdirSync(plugin).sort(), ['.claude-plugin', '.mcp.json', 'LICENSE', 'README.md', 'icon.png', 'skills']);
   for (const d of ['commands', 'agents', 'hooks', 'bin']) assert.ok(!existsSync(join(plugin, d)), d);
 });
 
@@ -118,4 +118,17 @@ test('manifests', () => {
   assert.equal(m.plugins[0].name, 'stronux');
   assert.equal(m.plugins[0].source, './plugins/stronux');
   assert.ok(!('version' in m.plugins[0]), 'version only in plugin.json');
+});
+
+test('directory listing fields (icon, URLs, version) and README/LICENSE in the plugin folder', () => {
+  const p = JSON.parse(readFileSync(join(plugin, '.claude-plugin', 'plugin.json'), 'utf8'));
+  assert.match(p.version, /^\d+\.\d+\.\d+$/);
+  assert.equal(p.homepage, 'https://stronux.com/claude');
+  assert.equal(p.documentationUrl, 'https://stronux.com/claude');
+  assert.ok(existsSync(join(plugin, p.icon)), 'icon file exists');
+  for (const k of ['supportUrl', 'privacyPolicyUrl', 'termsOfServiceUrl']) assert.match(p[k], /^https:\/\//, k);
+  assert.ok(p.author && p.author.name);
+  const readme = readFileSync(join(plugin, 'README.md'), 'utf8').replace(/```[\s\S]*?```/g, '');
+  assert.ok(readme.split(/\s+/).filter(Boolean).length >= 40, 'README has 40+ words outside code blocks');
+  assert.ok(existsSync(join(plugin, 'LICENSE')));
 });
