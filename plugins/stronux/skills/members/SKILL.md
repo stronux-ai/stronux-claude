@@ -21,7 +21,7 @@ This sends real emails and uses plan seats, so it only happens after the person 
    - `will_get_access` + `access_added`: already has an account, gets an email saying they have access to a new course.
    - `will_get_access` + `unknown`: Stronux could not tell which email; they can still be invited.
    - `already_has_access`: they already have it. Nothing happens and they get no email.
-   - `cannot_invite` with a `reason`: `invalid_email` (ask for the right one), `staff_user` (they work in this academy: invite staff from Stronux), `duplicate` (the same email twice).
+   - `cannot_invite` with a `reason`: `invalid_email` (ask for the right one), `staff_user` (they already work in this academy as staff: they are not invited as a member; to invite someone to the team use `invite_staff`, see the Staff section), `duplicate` (the same email twice).
    - `missing_course_ids`: they have some of the courses; only the missing ones are added.
    - `plan`: if there is a limit, say it ("500 seats, 132 used, 134 after this").
 4. **Ask for the yes** to that list. Only after they say yes to it, call `invite_members` with the same people and courses and `person_confirmed: true`. If the list changes in any way, preview again and ask again.
@@ -46,7 +46,7 @@ Members are learners. Staff work in the academy as **Instructor** or **Admin**. 
 ### The flow, always in this order
 
 1. **Get the person and the role.** Email, and instructor or admin. If the person says "so she can edit courses", that is **Admin**, not Instructor: say so. Never guess an email or a role.
-2. **Call `describe_staff_roles` and show it.** Before asking for the yes, show the email, the role, the courses (or "all courses" if none were given) and, in plain words, what that role can and cannot do.
+2. **Call `describe_staff_roles` and show it.** Before asking for the yes, show the email, the role, the courses (or, if none were given, "all the courses that exist today", not the ones created later) and, in plain words, what that role can and cannot do.
 3. **Ask for the yes** to that person and that role. Only then call `invite_staff` with `person_confirmed: true`. One person per yes: for a second person, show and ask again.
 4. **Report from the answer.** `invited: true` means a new person got the team email; `invited: false` means they already had an account and now have the role. Tell them they will appear in Members, Team.
 
