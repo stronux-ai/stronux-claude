@@ -22,10 +22,19 @@ claude plugin install stronux@stronux
 
 Full steps for Claude Code and Claude Desktop: [INSTALL.md](INSTALL.md).
 
-The plugin currently points to Stronux staging for testing.
+### For the team: test against another environment
+
+The plugin only ships the production connection. To try another environment, use the URL the team gives you (it is not stored in this repo) and add it by hand, without the plugin:
+
+```
+claude mcp add --transport http <name> <url> --scope user
+```
+
+Use a `<name>` other than `stronux` so it does not clash with the plugin's server, then `/mcp` -> Authenticate. If that environment asks for its own OAuth client, add `--client-id <client id the team gives you>`. Claude Code can expand `${VAR:-default}` in the `url` of a `.mcp.json`, but its docs do not list `oauth.clientId`, so the plugin does not use an env override.
 
 ## New in 1.4.0
 
+- **Connects to stronux.com.** The plugin now points to production (`https://stronux.com/api/mcp`). After updating, run `/mcp` -> Authenticate again.
 - **Several academies on one connection.** Claude starts by checking which academies you connected. If you have more than one, it asks in which to work (by name or handle, never by id) and does not mix them up. If one is not connected, it tells you how to add it.
 - **"What is new" in the community.** Reading never marks anything. When Claude finishes reviewing everything new it can mark it as seen, so next time starts from there; the app may ask you to allow it.
 - **Permission prompts.** When Claude changes something, the app may ask you to allow it first; the skills tell you once.

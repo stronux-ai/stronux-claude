@@ -2,8 +2,8 @@
   "mcpServers": {
     "stronux": {
       "type": "http",
-      "url": "https://demo.stronux.com/api/mcp",
-      "oauth": { "clientId": "2ur8s3rhp028e4hc8rp9e0r4rp", "callbackPort": 47821 }
+      "url": "https://stronux.com/api/mcp",
+      "oauth": { "clientId": "stronux-claude-prod", "callbackPort": 47821 }
     }
   }
 }
