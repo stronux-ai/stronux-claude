@@ -77,13 +77,32 @@ test('forbidden words', () => {
   }
 });
 
-test('.mcp.json points to staging with the public client', () => {
+test('.mcp.json points to production with the public client', () => {
   const mcp = JSON.parse(readFileSync(join(plugin, '.mcp.json'), 'utf8'));
   const srv = mcp.mcpServers.stronux;
   assert.equal(srv.type, 'http');
-  assert.equal(srv.url, 'https://demo.stronux.com/api/mcp');
-  assert.deepEqual(srv.oauth, { clientId: '2ur8s3rhp028e4hc8rp9e0r4rp', callbackPort: 47821 });
+  assert.equal(srv.url, 'https://stronux.com/api/mcp');
+  assert.deepEqual(srv.oauth, { clientId: 'stronux-claude-prod', callbackPort: 47821 });
   assert.deepEqual(Object.keys(srv).sort(), ['oauth', 'type', 'url']);
+});
+
+test('nothing from a test environment ships in the repo', () => {
+  // Patterns are built from pieces so this file does not trip itself.
+  const banned = [['demo', '.stronux.com'].join(''), ['2ur8s3rhp028e4hc', '8rp9e0r4rp'].join(''), ['stag', 'ing'].join('')];
+  const files = [];
+  const walk = (d) => {
+    for (const e of readdirSync(d, { withFileTypes: true })) {
+      if (e.name === '.git' || e.name === 'node_modules') continue;
+      const p = join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else files.push(p);
+    }
+  };
+  walk(root);
+  for (const f of files) {
+    const text = readFileSync(f, 'utf8').toLowerCase();
+    for (const w of banned) assert.ok(!text.includes(w), `${f}: contains ${w}`);
+  }
 });
 
 test('plugin contains only plugin.json, .mcp.json and skills (D1)', () => {

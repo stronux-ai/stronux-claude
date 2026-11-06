@@ -2,7 +2,7 @@
 
 The plugin has two parts: the **connection** to Stronux and the **skills** that tell Claude where each thing goes (courses, guides, services, bundles and space links). Claude never deletes anything and only publishes when you say yes.
 
-> **Right now the plugin points to Stronux staging** (`https://demo.stronux.com/api/mcp`), for testing. You need an owner account of an academy in staging to connect. Production comes later; the URL and client ID below will change then.
+> The plugin connects to Stronux (`https://stronux.com/api/mcp`). You need an owner account of an academy in Stronux to connect.
 
 ## Claude Code
 
@@ -27,10 +27,10 @@ The plugin has two parts: the **connection** to Stronux and the **skills** that 
 
 **Update:** `claude plugin update stronux@stronux`. **Disconnect:** "Clear authentication" in `/mcp`.
 
-**If `/mcp` does not use the Stronux client automatically**, add the server by hand (staging values):
+**If `/mcp` does not use the Stronux client automatically**, add the server by hand:
 
 ```
-claude mcp add --transport http stronux https://demo.stronux.com/api/mcp --client-id 2ur8s3rhp028e4hc8rp9e0r4rp --callback-port 47821 --scope user
+claude mcp add --transport http stronux https://stronux.com/api/mcp --client-id stronux-claude-prod --callback-port 47821 --scope user
 ```
 
 If you already added a server with the same URL by hand, Claude Code may hide the plugin's copy: use one of the two.
@@ -38,7 +38,7 @@ If you already added a server with the same URL by hand, Claude Code may hide th
 ## Claude Desktop
 
 1. **Skills:** Customize → Plugins → Add → upload the `plugins/stronux` folder as a `.zip`, or add the GitHub marketplace `stronux-ai/stronux-claude`.
-2. **Connection:** Customize → Connectors → Add custom connector. URL `https://demo.stronux.com/api/mcp`; under "Use your own OAuth client" (Advanced settings) enter the OAuth Client ID `2ur8s3rhp028e4hc8rp9e0r4rp` and leave the secret empty. Add, Connect, and sign in to Stronux. Connector authentication settings cannot be edited: to change them, remove the connector and add it again.
+2. **Connection:** Customize → Connectors → Add custom connector. URL `https://stronux.com/api/mcp`; under "Use your own OAuth client" (Advanced settings) enter the OAuth Client ID `stronux-claude-prod` and leave the secret empty. Add, Connect, and sign in to Stronux. Connector authentication settings cannot be edited: to change them, remove the connector and add it again.
 3. Give Claude access to the folder with your material and make the same first request.
 
 Availability of custom connectors depends on your Claude plan (the Free plan allows one).
